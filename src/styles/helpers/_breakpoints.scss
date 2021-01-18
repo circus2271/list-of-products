@@ -1,0 +1,14 @@
+$medium-start: 768px;
+$big-start: 1200px;
+
+@mixin medium() {
+  @media screen and (min-width: $medium-start) and (max-width: $big-start - 1px) {
+    @content;
+  }
+}
+
+@mixin big() {
+  @media screen and (min-width: $big-start) {
+    @content;
+  }
+}

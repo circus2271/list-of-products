@@ -1,0 +1,11 @@
+.main {
+  padding-top: 2.5rem;
+
+  @include medium() {
+    padding-top: 5rem;
+  }
+
+  @include big() {
+    padding-top: 5rem;
+  }
+}

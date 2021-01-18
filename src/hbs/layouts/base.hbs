@@ -1,0 +1,62 @@
+{{!-- layouts/base.hbs --}}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {{> includes/analytics-head-scripts }}
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#fafbfb"/>
+  <link rel="manifest" href="manifest.json">
+  <link rel="shortcut icon" href="media/icons/maskable_icon.png">
+  <link rel="apple-touch-icon" href="media/icons/maskable_icon.png">
+  <title>
+    {{#if title}}
+      {{title}}
+    {{else}}
+      Webpack SW Starter
+    {{/if}}
+  </title>
+  {{#> head-block}}
+  {{!-- Custom <head> content per page could be added. --}}
+
+    <meta name="description"
+          content="This is page description">
+  {{/head-block}}
+</head>
+<body>
+
+<div class="page">
+  {{!-- {{> includes/navbar }} --}}
+  {{!-- hidden navbar may be useful for position absolute/fixed navbars --}}
+  {{!-- {{> includes/navbar hidden="true"}} --}}
+
+  <div class="content">
+    <div class="wrapper">
+      {{#> content }}{{/ content }}
+    </div>
+  </div>
+
+  {{> includes/footer }}
+
+</div>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/serviceWorker.js')
+              .then(registration => {
+                // Регистрация прошла успешно
+                console.log('Sw registered with scope: ', registration.scope)
+              })
+              .catch(err => {
+                // Регистрация не удалась
+                console.log('SW registration failed: ', err)
+              })
+    })
+  }
+</script>
+</body>
+</html>

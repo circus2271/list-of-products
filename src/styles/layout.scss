@@ -1,0 +1,21 @@
+@import 'components/footer';
+
+body {
+  font-family: Montserrat, sans-serif;
+  min-height: 100vh;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.wrapper {
+  padding: 0 1.25rem;
+
+  @include medium() {
+    padding: 0 2.5rem;
+  }
+}
