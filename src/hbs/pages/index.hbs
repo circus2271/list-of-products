@@ -1,6 +1,21 @@
 {{#> layouts/base }}
   {{#*inline "content"}}
 
+<!--    <mwc-dialog heading="Privacy Policy" open>-->
+    <mwc-dialog heading="Что это?" open>
+      <div>
+        Это цифровой список покупок.
+        Данные о покупках сохраняются в телефоне и никогда не отправляются в интернет.
+        Приложение работает и в оффлайне.
+      </div>
+      <mwc-button
+          slot="primaryAction"
+          dialogAction="accept">
+<!--        Accept-->
+        Ясно
+      </mwc-button>
+    </mwc-dialog>
+
     <main class="main">
       <header class="header">
         <h1 class="header-title">

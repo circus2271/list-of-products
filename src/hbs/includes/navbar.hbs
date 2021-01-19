@@ -1,36 +1,6 @@
 {{!-- includes/navbar --}}
 
-<nav class="navbar" {{#if hidden}}style="visibility: hidden; position: static;"{{/if}}>
-  <div class="wrapper">
-    <ul class="navbar-items">
-      <li class="navlink">
-        <a href="#">
-        <span>
-          Home
-        </span>
-        </a>
-      </li>
-      <li class="navlink">
-        <a href="#">
-          <span>
-            Placeholder
-          </span>
-        </a>
-      </li>
-      <li class="navlink">
-        <a href="#">
-          <span>
-            Placeholder
-          </span>
-        </a>
-      </li>
-      <li class="navlink">
-        <a href="#">
-          <span>
-            Placeholder
-          </span>
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
+<mwc-top-app-bar>
+    <div slot="title">List of products</div>
+    <mwc-icon-button icon="info" slot="actionItems"></mwc-icon-button>
+</mwc-top-app-bar>
