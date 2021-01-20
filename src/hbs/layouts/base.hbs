@@ -17,48 +17,42 @@
     {{#if title}}
       {{title}}
     {{else}}
-      Webpack SW Starter
+      List of products
     {{/if}}
   </title>
   {{#> head-block}}
   {{!-- Custom <head> content per page could be added. --}}
 
-    <meta name="description"
-          content="This is page description">
+    <meta name="description" content="Это цифровой список покупок.
+    Данные о покупках сохраняются в телефоне и никогда не отправляются в интернет.
+    Приложение работает и в оффлайне.">
 
-      <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
-      <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+<!--    <link href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" rel="stylesheet">-->
   {{/head-block}}
 </head>
 <body>
 
 <div class="page">
-  {{> includes/navbar }}
-  {{!-- hidden navbar may be useful for position absolute/fixed navbars --}}
-  {{!-- {{> includes/navbar hidden="true"}} --}}
 
   <div class="content">
-    <div class="wrapper">
-      {{#> content }}{{/ content }}
-    </div>
+    {{#> content }}{{/ content }}
   </div>
-
-  {{> includes/footer }}
 
 </div>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/serviceWorker.js')
-              .then(registration => {
-                // Регистрация прошла успешно
-                console.log('Sw registered with scope: ', registration.scope)
-              })
-              .catch(err => {
-                // Регистрация не удалась
-                console.log('SW registration failed: ', err)
-              })
+          .then(registration => {
+            // Регистрация прошла успешно
+            console.log('Sw registered with scope: ', registration.scope)
+          })
+          .catch(err => {
+            // Регистрация не удалась
+            console.log('SW registration failed: ', err)
+          })
     })
   }
 </script>

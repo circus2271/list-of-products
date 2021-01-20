@@ -1,8 +1,12 @@
 {{#> layouts/base }}
   {{#*inline "content"}}
 
-<!--    <mwc-dialog heading="Privacy Policy" open>-->
-    <mwc-dialog heading="Что это?" open>
+    <mwc-top-app-bar>
+      <div slot="title">List of products</div>
+      <mwc-icon-button id="info" icon="info" slot="actionItems"></mwc-icon-button>
+    </mwc-top-app-bar>
+
+    <mwc-dialog id="dialog" heading="Что это?">
       <div>
         Это цифровой список покупок.
         Данные о покупках сохраняются в телефоне и никогда не отправляются в интернет.
@@ -11,38 +15,36 @@
       <mwc-button
           slot="primaryAction"
           dialogAction="accept">
-<!--        Accept-->
         Ясно
       </mwc-button>
     </mwc-dialog>
 
     <main class="main">
-      <header class="header">
-        <h1 class="header-title">
-          Webpack SW Starter
-        </h1>
-      </header>
-      <h2 class="title">Supported features:</h2>
-      <ul class="features">
-        <li>
-          <a href="https://www.typescriptlang.org/">Typescript</a>
-        </li>
-        <li>
-          <a href="https://sass-lang.com/">Sass</a>
-        </li>
-        <li>
-          <a href="https://github.com/postcss/autoprefixer">Autoprefixer</a>
-        </li>
-        <li>
-          <a href="https://handlebarsjs.com/">Handlebars</a>
-        </li>
-        <li>
-          <a href="https://developers.google.com/web/tools/workbox/">Workbox</a>
-        </li>
-        <li>
-          <a href="https://webpack.js.org/configuration/dev-server/#root">DevServer</a>
-        </li>
-      </ul>
+      <div class="wrapper">
+<!--        <header class="header">-->
+<!--          <h1 class="header-title">-->
+<!--            List of products-->
+<!--          </h1>-->
+<!--        </header>-->
+
+        <h2 class="title">Купить:</h2>
+
+        <mwc-list multi>
+          <mwc-check-list-item>Несколько апельсинов</mwc-check-list-item>
+          <mwc-check-list-item>Дыня</mwc-check-list-item>
+          <mwc-check-list-item>Ананас</mwc-check-list-item>
+          <mwc-check-list-item>Абрикосы</mwc-check-list-item>
+          <mwc-check-list-item>Поп корн</mwc-check-list-item>
+        </mwc-list>
+
+        <h2 class="title">Куплено:</h2>
+
+        <mwc-list multi>
+          <mwc-check-list-item selected>Финики</mwc-check-list-item>
+          <mwc-check-list-item selected>Папайя</mwc-check-list-item>
+        </mwc-list>
+
+      </div>
     </main>
 
   {{/inline}}
