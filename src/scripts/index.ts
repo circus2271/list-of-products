@@ -84,12 +84,8 @@ class ListOfItems {
       const template: string =
         `<mwc-check-list-item ${selected ?? 'selected'}>${title}</mwc-check-list-item>`
 
-      if (selected) {
-        this.selectedItemsList.insertAdjacentHTML('beforebegin', template)
-        return
-      }
-
-      this.defaultList.insertAdjacentHTML('beforebegin', template)
+      const list = selected ? this.selectedItemsList : this.defaultList
+      list.insertAdjacentHTML('beforebegin', template)
     })
   }
 }
