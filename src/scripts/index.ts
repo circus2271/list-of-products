@@ -61,29 +61,8 @@ const listItems: Array<IListItem> = [
   }
 ]
 
-const renderList = (items: Array<IListItem>): void => {
-  const selectedList = document.querySelector<List>('#selected')
-  const NonSelectedList = document.querySelector<List>('#not-selected')
-
-  items.forEach(item => {
-    if (item.selected) {
-      const template: string =
-        `<mwc-check-list-item selected>${item.title}</mwc-check-list-item>`
-      selectedList.insertAdjacentHTML('afterbegin', template)
-
-      return
-    }
-
-    const template: string =
-      `<mwc-check-list-item>${item.title}</mwc-check-list-item>`
-    NonSelectedList.insertAdjacentHTML('afterbegin', template)
-  })
-}
-
-renderList(listItems)
-
 document.body.addEventListener('action', (e: CustomEvent) => {
-  const { index } = e.detail
+  const {index} = e.detail
   const list = e.target as List
   const items = list.querySelectorAll<CheckListItem>('mwc-check-list-item')
   const current = items[index]
@@ -95,3 +74,25 @@ document.body.addEventListener('action', (e: CustomEvent) => {
   }
 })
 
+class ListOfItems {
+  private readonly defaultList: List = document.querySelector('#default-list')
+  private readonly selectedItemsList: List = document.querySelector('#selected-items-list')
+  private state: Array<IListItem> = listItems
+
+  renderLists() {
+    this.state.forEach(({selected, title}) => {
+      const template: string =
+        `<mwc-check-list-item ${selected ?? 'selected'}>${title}</mwc-check-list-item>`
+
+      if (selected) {
+        this.selectedItemsList.insertAdjacentHTML('beforebegin', template)
+        return
+      }
+
+      this.defaultList.insertAdjacentHTML('beforebegin', template)
+    })
+  }
+}
+
+const listOfItems = new ListOfItems()
+listOfItems.renderLists()
