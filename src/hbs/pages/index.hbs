@@ -2,7 +2,7 @@
   {{#*inline "content"}}
 
     <mwc-top-app-bar>
-      <div slot="title">List of products</div>
+      <div slot="title">Список покупок</div>
       <mwc-icon-button id="info" icon="info" slot="actionItems"></mwc-icon-button>
     </mwc-top-app-bar>
 
@@ -21,20 +21,18 @@
 
     <main class="main">
       <div class="wrapper">
-<!--        <header class="header">-->
-<!--          <h1 class="header-title">-->
-<!--            List of products-->
-<!--          </h1>-->
-<!--        </header>-->
 
-        <h2 class="title">Купить:</h2>
-        <mwc-list multi id="default-list">
+        <h2 class="title">Добавить новый товар в список</h2>
+        <mwc-textfield label="Название товара" icon="add" helper="Добавить новый товар в список"
+                       helperPersistent="true"></mwc-textfield>
 
-        <h2 class="title">Куплено:</h2>
+        <h2 class="title">Список покупок</h2>
+        <mwc-list multi id="default-list"></mwc-list>
+
+        <h2 class="title">Куплено</h2>
         <mwc-list multi id="selected-items-list"></mwc-list>
 
       </div>
     </main>
-
   {{/inline}}
 {{/ layouts/base }}

@@ -19,3 +19,9 @@ body {
     padding: 0 2.5rem;
   }
 }
+
+.list-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

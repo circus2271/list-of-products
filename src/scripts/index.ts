@@ -16,6 +16,7 @@ import '@material/mwc-list/mwc-list.js';
 import {Dialog} from "@material/mwc-dialog/mwc-dialog";
 import {List} from "@material/mwc-list/mwc-list";
 import {CheckListItem} from "@material/mwc-list/mwc-check-list-item";
+import '@material/mwc-textfield';
 
 const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-button#info')
 const dialog: Dialog = document.querySelector('mwc-dialog#dialog')
@@ -61,23 +62,16 @@ const listItems: Array<IListItem> = [
   }
 ]
 
-document.body.addEventListener('action', (e: CustomEvent) => {
-  const {index} = e.detail
-  const list = e.target as List
-  const items = list.querySelectorAll<CheckListItem>('mwc-check-list-item')
-  const current = items[index]
-  list.removeChild(current)
-  if (current.selected) {
-    document.querySelector('#selected').insertBefore(current, document.querySelector('#selected').firstChild)
-  } else {
-    document.querySelector('#not-selected').insertBefore(current, document.querySelector('#not-selected').firstChild)
-  }
-})
-
 class ListOfItems {
+  // TODO: Sanitize users input
+  // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Safely_inserting_external_content_into_a_page
   private readonly defaultList: List = document.querySelector('#default-list')
   private readonly selectedItemsList: List = document.querySelector('#selected-items-list')
   private state: Array<IListItem> = listItems
+
+  constructor() {
+
+  }
 
   renderLists() {
     this.state.forEach(({selected, title}) => {
