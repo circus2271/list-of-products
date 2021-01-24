@@ -17,6 +17,7 @@ import {Dialog} from "@material/mwc-dialog/mwc-dialog";
 import {List} from "@material/mwc-list/mwc-list";
 import {CheckListItem} from "@material/mwc-list/mwc-check-list-item";
 import '@material/mwc-textfield';
+import {TextField} from "@material/mwc-textfield/mwc-textfield";
 
 const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-button#info')
 const dialog: Dialog = document.querySelector('mwc-dialog#dialog')
@@ -67,10 +68,27 @@ class ListOfItems {
   // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Safely_inserting_external_content_into_a_page
   private readonly defaultList: List = document.querySelector('#default-list')
   private readonly selectedItemsList: List = document.querySelector('#selected-items-list')
+  private readonly textField: TextField = document.querySelector('mwc-textfield#product-name')
   private state: Array<IListItem> = listItems
 
   constructor() {
+    this.setTextFieldEventHandler()
+  }
 
+  setTextFieldEventHandler() {
+    this.textField
+      .addEventListener('keyup', (event: KeyboardEvent) => {
+        if (event.key === 'Enter') {
+          const {value} = this.textField
+          if (value === '') return
+
+          const template: string =
+            `<mwc-check-list-item>${value}</mwc-check-list-item>`
+
+          this.defaultList.insertAdjacentHTML('afterbegin', template)
+          this.textField.value = ''
+        }
+      });
   }
 
   renderLists() {
@@ -79,7 +97,7 @@ class ListOfItems {
         `<mwc-check-list-item ${selected ?? 'selected'}>${title}</mwc-check-list-item>`
 
       const list = selected ? this.selectedItemsList : this.defaultList
-      list.insertAdjacentHTML('beforebegin', template)
+      list.insertAdjacentHTML('beforeend', template)
     })
   }
 }
