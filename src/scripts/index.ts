@@ -14,18 +14,16 @@ import '@material/mwc-button'
 import '@material/mwc-list/mwc-check-list-item.js';
 import '@material/mwc-list/mwc-list.js';
 import {Dialog} from "@material/mwc-dialog/mwc-dialog";
-import {List} from "@material/mwc-list/mwc-list";
+import {ActionDetail, List} from "@material/mwc-list/mwc-list";
 import {CheckListItem} from "@material/mwc-list/mwc-check-list-item";
 import '@material/mwc-textfield';
 import {TextField} from "@material/mwc-textfield/mwc-textfield";
+import {SingleSelectedEvent} from "@material/mwc-list/mwc-list-foundation";
+import {ListItemBase} from "@material/mwc-list/mwc-list-item-base";
 
 const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-button#info')
 const dialog: Dialog = document.querySelector('mwc-dialog#dialog')
 navbarInfoButton.onclick = () => dialog.show()
-
-const lists = document.querySelectorAll<List>('mwc-list')
-// const listItems = document.querySelectorAll<CheckListItem>('mwc-check-list-item')
-// document.body.addEventListener('request-selected', e => console.log(e))
 
 interface IListItem {
   title: string,
@@ -73,6 +71,21 @@ class ListOfItems {
 
   constructor() {
     this.setTextFieldEventHandler()
+
+    document.body.addEventListener('action', (e: SingleSelectedEvent) => {
+      const list = e.target as List
+      const listItems = list.items
+      const { index } = e.detail
+
+      const currentNode = listItems.find((item, i) => i === index)
+      const { selected, textContent } = currentNode
+      const template: string =
+        `<mwc-check-list-item ${selected && 'selected'}>${textContent}</mwc-check-list-item>`
+
+      const newList = selected ? this.selectedItemsList : this.defaultList
+      list.removeChild(currentNode)
+      newList.insertAdjacentHTML('afterbegin', template)
+    })
   }
 
   setTextFieldEventHandler() {
@@ -94,7 +107,7 @@ class ListOfItems {
   renderLists() {
     this.state.forEach(({selected, title}) => {
       const template: string =
-        `<mwc-check-list-item ${selected ?? 'selected'}>${title}</mwc-check-list-item>`
+        `<mwc-check-list-item ${selected && 'selected'}>${title}</mwc-check-list-item>`
 
       const list = selected ? this.selectedItemsList : this.defaultList
       list.insertAdjacentHTML('beforeend', template)
