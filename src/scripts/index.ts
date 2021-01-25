@@ -74,7 +74,7 @@ class ListOfItems {
 
     document.body.addEventListener('action', (e: SingleSelectedEvent) => {
       const list = e.target as List
-      const listItems = list.items
+      const listItems: ListItemBase[] = list.items
       const { index } = e.detail
 
       const currentNode = listItems.find((item, i) => i === index)
