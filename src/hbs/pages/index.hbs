@@ -22,8 +22,6 @@
     <main class="main">
       <div class="wrapper">
 
-        <h2>Опции</h2>
-        
         <h3 class="title">Выбрать день</h3>
         <mwc-textfield id="date" value="25/01/2021" label="Дата" icon="date_range" helper="Выбрать день"
                        helperPersistent="true"></mwc-textfield>
@@ -32,14 +30,15 @@
         <mwc-textfield id="product-name" label="Название товара" icon="add" helper="Добавить новый товар в список"
                        helperPersistent="true"></mwc-textfield>
 
-        <h2 class="title">Список покупок</h2>
+        <div class="products-list">
 
-        <h3 class="title">Что купить?</h3>
-        <mwc-list multi id="default-list"></mwc-list>
+          <h3 class="title">Что купить?</h3>
+          <mwc-list multi id="default-list"></mwc-list>
 
-        <h3 class="title">Куплено</h3>
-        <mwc-list multi id="selected-items-list"></mwc-list>
+          <h3 class="title">Куплено</h3>
+          <mwc-list multi id="selected-items-list"></mwc-list>
 
+        </div>
       </div>
     </main>
   {{/inline}}
