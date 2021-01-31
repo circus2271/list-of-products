@@ -1,12 +1,21 @@
 import '../styles/style.scss'
+// import delay from './includes/delay.ts'
+//
+// (async () => {
+//     await delay(3000)
+//     console.log('Hello world')
+// })()
+
+// import '@material/mwc-icon/mwc-icon-font'
 import '@material/mwc-top-app-bar'
 import '@material/mwc-icon-button'
 import '@material/mwc-dialog'
 import '@material/mwc-button'
-import '@material/mwc-list/mwc-check-list-item';
+import '@material/mwc-list/mwc-check-list-item.js';
 import '@material/mwc-list/mwc-list.js';
 import {Dialog} from "@material/mwc-dialog/mwc-dialog";
-import {List} from "@material/mwc-list/mwc-list";
+import {ActionDetail, List} from "@material/mwc-list/mwc-list";
+import {CheckListItem} from "@material/mwc-list/mwc-check-list-item";
 import '@material/mwc-textfield';
 import {TextField} from "@material/mwc-textfield/mwc-textfield";
 import {SingleSelectedEvent} from "@material/mwc-list/mwc-list-foundation";
@@ -68,23 +77,30 @@ class ListOfItems {
     document.body.addEventListener('action', (e: SingleSelectedEvent) => {
       const list = e.target as List
       const listItems: ListItemBase[] = list.items
-      const { index } = e.detail
+      const {index} = e.detail
 
       const currentNode = listItems.find((item, i) => i === index)
-      const { selected, textContent } = currentNode
+      const {selected, textContent} = currentNode
       const template: string =
         `<mwc-check-list-item ${selected && 'selected'}>${textContent}</mwc-check-list-item>`
 
       const newList = selected ? this.selectedItemsList : this.defaultList
       const position = newList === this.selectedItemsList ? 'afterbegin' : 'beforeend'
 
-      const checkboxCheckMark: HTMLElement = currentNode.shadowRoot.querySelector('mwc-checkbox')
-        .shadowRoot.querySelector('.mdc-checkbox__checkmark')
+      const time = new Date().getTime()
+      const checkboxAnimationDuration = 300
+      const render = () => requestAnimationFrame(() => {
+        if (new Date().getTime() - time >= checkboxAnimationDuration) {
+          list.removeChild(currentNode)
+          newList.insertAdjacentHTML(position, template)
 
-      checkboxCheckMark.onanimationend = () => {
-        list.removeChild(currentNode)
-        newList.insertAdjacentHTML(position, template)
-      }
+          return
+        }
+
+        render()
+      })
+
+      render()
     })
   }
 
