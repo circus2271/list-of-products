@@ -13,8 +13,6 @@ import {TextField} from "@material/mwc-textfield/mwc-textfield";
 import {SingleSelectedEvent} from "@material/mwc-list/mwc-list-foundation";
 import {ListItemBase} from "@material/mwc-list/mwc-list-item-base";
 import debounce from "./includes/debounce";
-// import 'materialize-css/dist/css/materialize.min.css';
-// import 'materialize-css/dist/js/materialize.min';
 
 const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-button#info')
 const dialog: Dialog = document.querySelector('mwc-dialog#dialog')
@@ -25,42 +23,11 @@ interface IListItem {
   selected: boolean
 }
 
-const listItems: Array<IListItem> = [
-  {
-    title: 'Несколько апельсинов',
-    selected: false
-  },
-  {
-    title: 'Дыня',
-    selected: false
-  },
-  {
-    title: 'Ананас',
-    selected: false
-  },
-  {
-    title: 'Абрикосы',
-    selected: false
-  },
-  {
-    title: 'Поп корн',
-    selected: false
-  },
-  {
-    title: 'Финики',
-    selected: true
-  },
-  {
-    title: 'Папайя',
-    selected: true
-  }
-]
-
 class ListOfItems {
   private readonly defaultList: List = document.querySelector('#default-list')
   private readonly selectedItemsList: List = document.querySelector('#selected-items-list')
   private readonly textField: TextField = document.querySelector('mwc-textfield#product-name')
-  private state: Array<IListItem> = listItems
+  private state: Array<IListItem>
 
   constructor() {
     this.setTextFieldEventHandler()
@@ -83,6 +50,13 @@ class ListOfItems {
         list.removeChild(currentNode)
         newList.insertAdjacentHTML(position, template)
 
+        this.state.forEach(item => {
+          if (item.title === textContent) {
+            item.selected = !item.selected
+          }
+        })
+        localStorage.setItem('state', JSON.stringify(this.state))
+
         this.populateEmptyLists()
         this.removeUselessPlaceholderNodes()
       }, 300)
@@ -99,14 +73,24 @@ class ListOfItems {
 
       if (element.closest('.selected-list-wrapper')) {
         this.selectedItemsList.innerHTML = ''
+        this.state = this.state.filter(item => item.selected === false)
+        this.setLocalStorageState()
+        this.populateEmptyLists()
       }
 
       if (element.closest('.default-list-wrapper')) {
         this.defaultList.innerHTML = ''
+        this.state = this.state.filter(item => item.selected === true)
+        this.setLocalStorageState()
+        this.populateEmptyLists()
       }
 
       this.populateEmptyLists()
     })
+  }
+
+  setLocalStorageState() {
+    localStorage.setItem('state', JSON.stringify(this.state))
   }
 
   setTextFieldEventHandler() {
@@ -120,6 +104,12 @@ class ListOfItems {
             `<mwc-check-list-item>${value}</mwc-check-list-item>`
 
           this.defaultList.insertAdjacentHTML('afterbegin', template)
+          this.state.push({
+            title: value,
+            selected: false
+          })
+          localStorage.setItem('state', JSON.stringify(this.state))
+
           this.textField.value = ''
 
           this.removeUselessPlaceholderNodes()
@@ -128,6 +118,9 @@ class ListOfItems {
   }
 
   renderLists() {
+    const stringState = localStorage.getItem('state')
+    this.state = JSON.parse(stringState) || []
+
     this.state.forEach(({selected, title}) => {
       const template: string =
         `<mwc-check-list-item ${selected && 'selected'}>${title}</mwc-check-list-item>`
@@ -135,21 +128,28 @@ class ListOfItems {
       const list = selected ? this.selectedItemsList : this.defaultList
       list.insertAdjacentHTML('beforeend', template)
     })
+
+    this.populateEmptyLists()
   }
 
   populateEmptyLists() {
-    const emptyListTextNode = document.createElement('div')
-    emptyListTextNode.innerText = 'Список пуст'
-    emptyListTextNode.classList.add('placeholder-text-node')
+    const createPlaceHolder = () => {
+      const placeholder = document.createElement('div')
+      placeholder.innerText = 'Список пуст'
+      placeholder.classList.add('placeholder-text-node')
+
+      return placeholder
+    }
 
     if (this.selectedItemsList.children.length === 0) {
+      const emptyListTextNode = createPlaceHolder()
       this.selectedItemsList.appendChild(emptyListTextNode)
     }
 
     if (this.defaultList.children.length === 0) {
+      const emptyListTextNode = createPlaceHolder()
       this.defaultList.appendChild(emptyListTextNode)
     }
-
   }
 
   removeUselessPlaceholderNodes() {

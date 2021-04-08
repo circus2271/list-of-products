@@ -63,7 +63,6 @@
     "@material/mwc-textfield": "^0.20.0",
     "@material/mwc-top-app-bar": "^0.20.0",
     "@webcomponents/webcomponentsjs": "^2.5.0",
-    "materialize-css": "^1.0.0",
     "workbox-cacheable-response": "^6.0.2",
     "workbox-expiration": "^6.0.2",
     "workbox-precaching": "^6.0.2",
