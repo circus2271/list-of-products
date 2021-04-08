@@ -113,14 +113,6 @@ module.exports = {
               from: path.resolve(__dirname, '../src/media/icons/maskable_icon.png'),
               to: 'pwa/icons/maskable_icon.png'
             },
-            {
-              from: path.resolve(__dirname, '../src/media/icons/192_icon.png'),
-              to: 'pwa/icons/192_icon.png'
-            },
-            {
-              from: path.resolve(__dirname, '../src/media/icons/144_icon.png'),
-              to: 'pwa/icons/144_icon.png'
-            }
           ]
         }
     ),
