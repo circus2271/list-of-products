@@ -3,8 +3,14 @@
   "name": "Список покупок",
   "icons": [
     {
-      "src": "/pwa/icons/maskable_icon.png",
-      "sizes": "196x196",
+      "src": "/media/icons/maskable_icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/media/icons/192_icon.png",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
