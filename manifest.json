@@ -1,6 +1,6 @@
 {
-  "short_name": "SW Starter",
-  "name": "Webpack SW Starter",
+  "short_name": "Список покупок",
+  "name": "Список покупок",
   "icons": [
     {
       "src": "/pwa/icons/maskable_icon.png",
