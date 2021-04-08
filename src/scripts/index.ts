@@ -1,12 +1,5 @@
 import '../styles/style.scss'
-// import delay from './includes/delay.ts'
-//
-// (async () => {
-//     await delay(3000)
-//     console.log('Hello world')
-// })()
 
-// import '@material/mwc-icon/mwc-icon-font'
 import '@material/mwc-top-app-bar'
 import '@material/mwc-icon-button'
 import '@material/mwc-dialog'
@@ -14,12 +7,14 @@ import '@material/mwc-button'
 import '@material/mwc-list/mwc-check-list-item.js';
 import '@material/mwc-list/mwc-list.js';
 import {Dialog} from "@material/mwc-dialog/mwc-dialog";
-import {ActionDetail, List} from "@material/mwc-list/mwc-list";
-import {CheckListItem} from "@material/mwc-list/mwc-check-list-item";
+import {List} from "@material/mwc-list/mwc-list";
 import '@material/mwc-textfield';
 import {TextField} from "@material/mwc-textfield/mwc-textfield";
 import {SingleSelectedEvent} from "@material/mwc-list/mwc-list-foundation";
 import {ListItemBase} from "@material/mwc-list/mwc-list-item-base";
+import debounce from "./includes/debounce";
+// import 'materialize-css/dist/css/materialize.min.css';
+// import 'materialize-css/dist/js/materialize.min';
 
 const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-button#info')
 const dialog: Dialog = document.querySelector('mwc-dialog#dialog')
@@ -62,17 +57,14 @@ const listItems: Array<IListItem> = [
 ]
 
 class ListOfItems {
-  // TODO: Sanitize users input
-  // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Safely_inserting_external_content_into_a_page
   private readonly defaultList: List = document.querySelector('#default-list')
   private readonly selectedItemsList: List = document.querySelector('#selected-items-list')
   private readonly textField: TextField = document.querySelector('mwc-textfield#product-name')
-  private readonly datePicker: TextField = document.querySelector('mwc-textfield#date')
-  private date: Date | 'today' | 'yesterday' | 'tomorrow'
   private state: Array<IListItem> = listItems
 
   constructor() {
     this.setTextFieldEventHandler()
+    this.removeUselessPlaceholderNodes()
 
     document.body.addEventListener('action', (e: SingleSelectedEvent) => {
       const list = e.target as List
@@ -87,20 +79,33 @@ class ListOfItems {
       const newList = selected ? this.selectedItemsList : this.defaultList
       const position = newList === this.selectedItemsList ? 'afterbegin' : 'beforeend'
 
-      const time = new Date().getTime()
-      const checkboxAnimationDuration = 300
-      const render = () => requestAnimationFrame(() => {
-        if (new Date().getTime() - time >= checkboxAnimationDuration) {
-          list.removeChild(currentNode)
-          newList.insertAdjacentHTML(position, template)
+      const replaceListItem = debounce(() => {
+        list.removeChild(currentNode)
+        newList.insertAdjacentHTML(position, template)
 
-          return
-        }
+        this.populateEmptyLists()
+        this.removeUselessPlaceholderNodes()
+      }, 300)
 
-        render()
-      })
+      replaceListItem()
+    })
 
-      render()
+    document.body.addEventListener('click', e => {
+      const element = e.target as HTMLElement
+
+      if (element.closest('.mwc-button') === null) {
+        return
+      }
+
+      if (element.closest('.selected-list-wrapper')) {
+        this.selectedItemsList.innerHTML = ''
+      }
+
+      if (element.closest('.default-list-wrapper')) {
+        this.defaultList.innerHTML = ''
+      }
+
+      this.populateEmptyLists()
     })
   }
 
@@ -116,6 +121,8 @@ class ListOfItems {
 
           this.defaultList.insertAdjacentHTML('afterbegin', template)
           this.textField.value = ''
+
+          this.removeUselessPlaceholderNodes()
         }
       });
   }
@@ -129,6 +136,34 @@ class ListOfItems {
       list.insertAdjacentHTML('beforeend', template)
     })
   }
+
+  populateEmptyLists() {
+    const emptyListTextNode = document.createElement('div')
+    emptyListTextNode.innerText = 'Список пуст'
+    emptyListTextNode.classList.add('placeholder-text-node')
+
+    if (this.selectedItemsList.children.length === 0) {
+      this.selectedItemsList.appendChild(emptyListTextNode)
+    }
+
+    if (this.defaultList.children.length === 0) {
+      this.defaultList.appendChild(emptyListTextNode)
+    }
+
+  }
+
+  removeUselessPlaceholderNodes() {
+    if (this.selectedItemsList.children.length === 2) {
+      const placeholderTextNode = this.selectedItemsList.querySelector('.placeholder-text-node')
+      this.selectedItemsList.removeChild(placeholderTextNode)
+    }
+
+    if (this.defaultList.children.length === 2) {
+      const placeholderTextNode = this.defaultList.querySelector('.placeholder-text-node')
+      this.defaultList.removeChild(placeholderTextNode)
+    }
+  }
+
 }
 
 const listOfItems = new ListOfItems()
