@@ -110,8 +110,8 @@ module.exports = {
               to: 'manifest.json'
             },
             {
-              from: path.resolve(__dirname, '../src/media/icons/maskable_icon.png'),
-              to: 'pwa/icons/maskable_icon.png'
+              from: path.resolve(__dirname, '../src/media/icons/'),
+              to: 'pwa/icons/'
             },
           ]
         }
