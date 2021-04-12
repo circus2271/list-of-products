@@ -73,17 +73,14 @@ class ListOfItems {
 
       if (element.closest('.selected-list-wrapper')) {
         this.selectedItemsList.innerHTML = ''
-        this.state = this.state.filter(item => item.selected === false)
-        this.setLocalStorageState()
-        this.populateEmptyLists()
       }
-
       if (element.closest('.default-list-wrapper')) {
         this.defaultList.innerHTML = ''
-        this.state = this.state.filter(item => item.selected === true)
-        this.setLocalStorageState()
-        this.populateEmptyLists()
       }
+
+      this.state = this.state.filter(item => item.selected === false)
+      this.setLocalStorageState()
+      this.populateEmptyLists()
 
       this.populateEmptyLists()
     })
