@@ -6,6 +6,7 @@ const path = require('path')
 const templates = require('./templates')
 
 module.exports = {
+  target: 'web',
   entry: {
     bundle: [
       path.resolve(__dirname, '../src/scripts/index.ts')
