@@ -41,7 +41,7 @@ class ListOfItems {
       const currentNode = listItems.find((item, i) => i === index)
       const {selected, textContent} = currentNode
       const template: string =
-        `<mwc-check-list-item ${selected && 'selected'}>${textContent}</mwc-check-list-item>`
+        `<mwc-check-list-item ${selected ? 'selected' : ''}>${textContent}</mwc-check-list-item>`
 
       const newList = selected ? this.selectedItemsList : this.defaultList
       const position = newList === this.selectedItemsList ? 'afterbegin' : 'beforeend'
@@ -120,7 +120,7 @@ class ListOfItems {
 
     this.state.forEach(({selected, title}) => {
       const template: string =
-        `<mwc-check-list-item ${selected && 'selected'}>${title}</mwc-check-list-item>`
+        `<mwc-check-list-item ${selected ? 'selected' : ''}>${title}</mwc-check-list-item>`
 
       const list = selected ? this.selectedItemsList : this.defaultList
       list.insertAdjacentHTML('beforeend', template)
