@@ -39,7 +39,7 @@ mwc-list {
   }
 
   &.placeholder-visible {
-    //override default .mwc-list padding
+    //override default .mdc-list padding
     --mdc-list-vertical-padding: 0;
 
     &::after {
