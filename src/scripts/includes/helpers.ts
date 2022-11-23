@@ -14,7 +14,7 @@ export interface IListItem {
   id: string // new Date().getTime()
 }
 
-export class ListItem implements IListItem{
+export class ListItem implements IListItem {
   constructor(public title: string, public selected: boolean, public id: string) {
   }
 }
