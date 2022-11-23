@@ -29,17 +29,22 @@ mwc-list {
   position: relative;
 
   &::after {
-    content: '';
+    content: unset;
     height: 56px;
-    padding: 0 16px;
+    padding: 8px 16px;
     line-height: 1.15;
-    //display: flex;
-    //align-items: center;
+    //font-size: 1.1rem;
+    display: flex;
+    align-items: center;
   }
 
-  &.placeholder-visible::after {
-    content: 'Список пуст'
+  &.placeholder-visible {
+    //override default .mwc-list padding
+    --mdc-list-vertical-padding: 0;
+
+    &::after {
+      content: 'Список пуст'
+    }
   }
 }
 
-//[blackbackground] {background: black;}
