@@ -1,24 +1,33 @@
 import { CheckListItem } from "@material/mwc-list/mwc-check-list-item";
 import { TextField } from "@material/mwc-textfield";
+import { Button } from "@material/mwc-button/mwc-button";
 
 export const textField: TextField = document.querySelector('mwc-textfield#product-name')
 export const defaultList = document.querySelector('#js-default-list')
 export const selectedItemsList = document.querySelector('#js-selected-items-list')
-
+export const clearDefaultListButton: Button = document.querySelector('#js-clear-default-list-button')
+export const clearSelectedListButton: Button = document.querySelector('#js-clear-selected-list-button')
 
 export interface IListItem {
   title: string,
-  selected: boolean
+  selected: boolean,
+  id: string // new Date().getTime()
+}
+
+export class ListItem implements IListItem{
+  constructor(public title: string, public selected: boolean, public id: string) {
+  }
 }
 
 export let state: IListItem[] = JSON.parse(localStorage.getItem('state')) || [];
-
+window['state'] = state
 export const renderInitialState = () => {
   state.forEach(product => {
     const listEl = product.selected ? selectedItemsList : defaultList
     const listItem = new CheckListItem()
     listItem.innerText = product.title
     listItem.selected = product.selected
+    listItem.id = product.id
     listEl.appendChild(listItem)
   })
 
@@ -36,31 +45,46 @@ export const handlePlaceholders = () => {
 }
 
 
-export const saveState = () => {
-  const listItems = document.querySelectorAll('mwc-check-list-item')
-  // TODO: figure out why spread syntax throws an error here
-  state = Array.from(listItems).map((item: CheckListItem) => {
-    return {
-      title: item.innerText,
-      selected: item.selected
-    }
-  })
+// export const saveStateFromMarkupSource = () => {
+//   const listItems = document.querySelectorAll('mwc-check-list-item')
+//   // TODO: figure out why spread syntax throws an error here
+//   state = Array.from(listItems).map((item: CheckListItem) => {
+//     return {
+//       title: item.innerText,
+//       selected: item.selected
+//     }
+//   })
+//
+//   localStorage.setItem('state', JSON.stringify(state))
+// }
 
+// export const updateState = (newListItemValue: IListItem) => {
+//   state = [...state, newListItemValue]
+// }
+
+export const removeAllSelectedItemsFromState = () => {
+  state = state.filter(stateItem => stateItem.selected === false)
   localStorage.setItem('state', JSON.stringify(state))
 }
 
-export const updateStateWithOneNewDefaultValue = (value: string) => {
-  state = [...state, {title: value, selected: false}]
-
+export const removeAllNotSelectedItemsFromState = () => {
+  state = state.filter(stateItem => stateItem.selected === true)
   localStorage.setItem('state', JSON.stringify(state))
 }
 
-export const showStateFactory = () => {
+export const handleButtonsDisabling = () => {
+  clearDefaultListButton.disabled = defaultList.children.length === 0
+  clearSelectedListButton.disabled = selectedItemsList.children.length === 0
+}
+
+export const showStateFactory = (debug: boolean) => {
   // const showState = showStateFactory()
 
-  const stateContainer = document.createElement('div.state-container')
-  document.body.prepend(stateContainer)
+  if (debug) {
+    const stateContainer = document.createElement('div.state-container')
+    document.body.prepend(stateContainer)
 
-  return () => stateContainer.innerHTML = JSON.stringify(state)
+    return () => stateContainer.innerHTML = JSON.stringify(state)
+  }
 }
 

@@ -6,31 +6,36 @@ import '@material/mwc-dialog'
 import '@material/mwc-button'
 import '@material/mwc-list/mwc-check-list-item.js';
 import '@material/mwc-list/mwc-list.js';
+import '@material/mwc-textfield';
 import { Dialog } from "@material/mwc-dialog/mwc-dialog";
 import { List } from "@material/mwc-list/mwc-list";
-import '@material/mwc-textfield';
 import { SingleSelectedEvent } from "@material/mwc-list/mwc-list-foundation";
 import { CheckListItem } from "@material/mwc-list/mwc-check-list-item";
 import {
   defaultList,
   handlePlaceholders,
   renderInitialState,
-  saveState,
+  state,
   // showStateFactory,
   selectedItemsList,
   textField,
-  updateStateWithOneNewDefaultValue
+  removeAllSelectedItemsFromState,
+  removeAllNotSelectedItemsFromState,
+  handleButtonsDisabling,
+  IListItem, ListItem, showStateFactory,
 } from "./includes/helpers";
 import { MDCDialogCloseEvent } from "@material/dialog/types";
-import { Button } from "@material/mwc-button";
+import { Button } from "@material/mwc-button/mwc-button";
 
 const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-button#info')
 const infoDialog: Dialog = document.querySelector('mwc-dialog#info-dialog')
 navbarInfoButton.onclick = () => infoDialog.show()
 
-// const showState = showStateFactory()
+// const showState = showStateFactory(true)
 
 renderInitialState()
+handleButtonsDisabling()
+// showState()
 
 textField.addEventListener('keyup', (event: KeyboardEvent) => {
   const enterPressed = event.key === 'Enter'
@@ -40,12 +45,15 @@ textField.addEventListener('keyup', (event: KeyboardEvent) => {
 
     if (value.trim() === '') return;
 
-    // because it is faster than saveState()
-    updateStateWithOneNewDefaultValue(value);
+    const newListItem = new ListItem(value, false, new Date().getTime().toString())
+    state.push(newListItem)
+    localStorage.setItem('state', JSON.stringify(state))
     const checkListItem = new CheckListItem()
-    checkListItem.innerText = value
-
+    checkListItem.innerText = newListItem.title
+    checkListItem.id = newListItem.id
     defaultList.prepend(checkListItem)
+    // showState()
+    handleButtonsDisabling()
     handlePlaceholders()
 
     textField.value = ''
@@ -55,8 +63,7 @@ textField.addEventListener('keyup', (event: KeyboardEvent) => {
 document.addEventListener('action', (event: SingleSelectedEvent) => {
   const listElement = event.target as List
   const selectedListItemIndex = event.detail.index
-  const selectedListItem = listElement.children.item(selectedListItemIndex) as HTMLElement
-  // console.log(selectedListItemIndex)
+  const selectedListItem = listElement.children.item(selectedListItemIndex) as CheckListItem
 
   // TODO: rewrite this
   const newListId = listElement.id === 'js-default-list' ? 'js-selected-items-list' : 'js-default-list'
@@ -69,9 +76,13 @@ document.addEventListener('action', (event: SingleSelectedEvent) => {
   selectedListItem.setAttribute(attributeName, 'true')
   setTimeout(() => {
     selectedListItem.setAttribute(attributeName, 'false');
-    newList.appendChild(selectedListItem)
 
-    saveState()
+    const stateEl = state.find(item => item.id === selectedListItem.id)
+    stateEl.selected = !stateEl.selected
+    localStorage.setItem('state', JSON.stringify(state))
+    newList.appendChild(selectedListItem)
+    // showState()
+    handleButtonsDisabling()
     handlePlaceholders()
   }, 300)
 })
@@ -111,13 +122,14 @@ document.querySelectorAll('.js-clear-list-button').forEach((button: Button, i: n
 
       if (action === primaryAction) {
         listEl.innerHTML = ''
-        saveState()
+        if (listEl === defaultList) removeAllNotSelectedItemsFromState()
+        if (listEl === selectedItemsList) removeAllSelectedItemsFromState()
+        handleButtonsDisabling()
         handlePlaceholders()
+        // showState()
       }
     })
 
-
-    // TODO: disable button if there is no listitems in a list
     button.onclick = () => {
       if (listEl.children.length > 0) dialogRef.open = true
     }
