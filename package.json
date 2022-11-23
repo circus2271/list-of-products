@@ -12,7 +12,7 @@
     "webpack-sw-starter",
     "webpack serviceWorker starter"
   ],
-  "author": "octoCamo <rodionov134@gmail.com>",
+  "author": "circus2271 <rodionov134@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.12.3",

@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2015",
+    "target": "es5",
     "sourceMap": true,
     "alwaysStrict": true,
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "downlevelIteration": true
   },
   "exclude": [
     "node_modules"

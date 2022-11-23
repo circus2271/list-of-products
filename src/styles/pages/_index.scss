@@ -24,3 +24,22 @@
     margin-top: 0;
   }
 }
+
+mwc-list {
+  position: relative;
+
+  &::after {
+    content: '';
+    height: 56px;
+    padding: 0 16px;
+    line-height: 1.15;
+    //display: flex;
+    //align-items: center;
+  }
+
+  &.placeholder-visible::after {
+    content: 'Список пуст'
+  }
+}
+
+//[blackbackground] {background: black;}

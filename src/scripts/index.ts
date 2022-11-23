@@ -6,162 +6,116 @@ import '@material/mwc-dialog'
 import '@material/mwc-button'
 import '@material/mwc-list/mwc-check-list-item.js';
 import '@material/mwc-list/mwc-list.js';
-import {Dialog} from "@material/mwc-dialog/mwc-dialog";
-import {List} from "@material/mwc-list/mwc-list";
+import { Dialog } from "@material/mwc-dialog/mwc-dialog";
+import { List } from "@material/mwc-list/mwc-list";
 import '@material/mwc-textfield';
-import {TextField} from "@material/mwc-textfield/mwc-textfield";
-import {SingleSelectedEvent} from "@material/mwc-list/mwc-list-foundation";
-import {ListItemBase} from "@material/mwc-list/mwc-list-item-base";
-import debounce from "./includes/debounce";
+import { SingleSelectedEvent } from "@material/mwc-list/mwc-list-foundation";
+import { CheckListItem } from "@material/mwc-list/mwc-check-list-item";
+import {
+  defaultList,
+  handlePlaceholders,
+  renderInitialState,
+  saveState,
+  // showStateFactory,
+  selectedItemsList,
+  textField,
+  updateStateWithOneNewDefaultValue
+} from "./includes/helpers";
+import { MDCDialogCloseEvent } from "@material/dialog/types";
+import { Button } from "@material/mwc-button";
 
 const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-button#info')
-const dialog: Dialog = document.querySelector('mwc-dialog#dialog')
-navbarInfoButton.onclick = () => dialog.show()
+const infoDialog: Dialog = document.querySelector('mwc-dialog#info-dialog')
+navbarInfoButton.onclick = () => infoDialog.show()
 
-interface IListItem {
-  title: string,
-  selected: boolean
-}
+// const showState = showStateFactory()
 
-class ListOfItems {
-  private readonly defaultList: List = document.querySelector('#default-list')
-  private readonly selectedItemsList: List = document.querySelector('#selected-items-list')
-  private readonly textField: TextField = document.querySelector('mwc-textfield#product-name')
-  private state: Array<IListItem>
+renderInitialState()
 
-  constructor() {
-    this.setTextFieldEventHandler()
-    this.removeUselessPlaceholderNodes()
+textField.addEventListener('keyup', (event: KeyboardEvent) => {
+  const enterPressed = event.key === 'Enter'
 
-    document.body.addEventListener('action', (e: SingleSelectedEvent) => {
-      const list = e.target as List
-      const listItems: ListItemBase[] = list.items
-      const {index} = e.detail
+  if (enterPressed) {
+    const { value } = textField;
 
-      const currentNode = listItems.find((item, i) => i === index)
-      const {selected, textContent} = currentNode
-      const template: string =
-        `<mwc-check-list-item ${selected ? 'selected' : ''}>${textContent}</mwc-check-list-item>`
+    if (value.trim() === '') return;
 
-      const newList = selected ? this.selectedItemsList : this.defaultList
-      const position = newList === this.selectedItemsList ? 'afterbegin' : 'beforeend'
+    // because it is faster than saveState()
+    updateStateWithOneNewDefaultValue(value);
+    const checkListItem = new CheckListItem()
+    checkListItem.innerText = value
 
-      const replaceListItem = debounce(() => {
-        list.removeChild(currentNode)
-        newList.insertAdjacentHTML(position, template)
+    defaultList.prepend(checkListItem)
+    handlePlaceholders()
 
-        this.state.forEach(item => {
-          if (item.title === textContent) {
-            item.selected = !item.selected
-          }
-        })
-        localStorage.setItem('state', JSON.stringify(this.state))
+    textField.value = ''
+  }
+})
 
-        this.populateEmptyLists()
-        this.removeUselessPlaceholderNodes()
-      }, 300)
+document.addEventListener('action', (event: SingleSelectedEvent) => {
+  const listElement = event.target as List
+  const selectedListItemIndex = event.detail.index
+  const selectedListItem = listElement.children.item(selectedListItemIndex) as HTMLElement
+  // console.log(selectedListItemIndex)
 
-      replaceListItem()
+  // TODO: rewrite this
+  const newListId = listElement.id === 'js-default-list' ? 'js-selected-items-list' : 'js-default-list'
+  const newList = document.querySelector(`#${newListId}`)
+
+  // this peace of code is used to make sure that animation is ended
+  // TODO: change hardcoded value of setTimeout; replace it with real animation duration
+  const attributeName = 'shouldBeMoved'
+  if (selectedListItem.getAttribute(attributeName) === 'true') return
+  selectedListItem.setAttribute(attributeName, 'true')
+  setTimeout(() => {
+    selectedListItem.setAttribute(attributeName, 'false');
+    newList.appendChild(selectedListItem)
+
+    saveState()
+    handlePlaceholders()
+  }, 300)
+})
+
+
+document.querySelectorAll('.js-clear-list-button').forEach((button: Button, i: number) => {
+  const listEl = button.closest('.js-list-wrapper').querySelector('.js-mwc-list')
+
+  let heading;
+  if (listEl === defaultList) heading = 'Удалить список еще не купленных товаров?'
+  if (listEl === selectedItemsList) heading = 'Удалить список уже приобретённых товаров?'
+  if (heading === undefined) {
+    console.warn('Что-то не так со списками покупок.. Вероятно, неправильно расставлены их id в разметке')
+    console.warn('Очистить списки покупок временно не получится')
+    return
+  }
+
+  const dialogId = `js-clear-list-dialog-${i + 1}`
+  const primaryAction = 'confirm-deletion'
+  const secondaryAction = 'cancel'
+  const dialog = `
+    <mwc-dialog heading="${heading}" id="${dialogId}">
+      <mwc-button slot="primaryAction" dialogAction="${primaryAction}">Удалить</mwc-button>
+      <mwc-button slot="secondaryAction" dialogAction="${secondaryAction}">Не удалять</mwc-button>
+    </mwc-dialog>
+  `
+
+  const dialogContainer = document.querySelector('.js-dialog-container')
+  dialogContainer.innerHTML += dialog
+
+  setTimeout(() => {
+    // wait until dialog is placed into dialogContainer
+    // use event loop to delay this code execution
+    const dialogRef: Dialog = dialogContainer.querySelector(`#${dialogId}`)
+    dialogRef.addEventListener('closed', (e: MDCDialogCloseEvent) => {
+      const { action } = e.detail;
+
+      if (action === primaryAction) {
+        listEl.innerHTML = ''
+        saveState()
+        handlePlaceholders()
+      }
     })
 
-    document.body.addEventListener('click', e => {
-      const element = e.target as HTMLElement
-
-      if (element.closest('.mwc-button') === null) {
-        return
-      }
-
-      if (element.closest('.selected-list-wrapper')) {
-        this.selectedItemsList.innerHTML = ''
-        this.state = this.state.filter(item => item.selected === false)
-      }
-
-      if (element.closest('.default-list-wrapper')) {
-        this.defaultList.innerHTML = ''
-        this.state = this.state.filter(item => item.selected === true)
-      }
-
-      this.setLocalStorageState()
-      this.populateEmptyLists()
-    })
-  }
-
-  setLocalStorageState() {
-    localStorage.setItem('state', JSON.stringify(this.state))
-  }
-
-  setTextFieldEventHandler() {
-    this.textField
-      .addEventListener('keyup', (event: KeyboardEvent) => {
-        if (event.key === 'Enter') {
-          const {value} = this.textField
-          if (value === '') return
-
-          const template: string =
-            `<mwc-check-list-item>${value}</mwc-check-list-item>`
-
-          this.defaultList.insertAdjacentHTML('afterbegin', template)
-          this.state.push({
-            title: value,
-            selected: false
-          })
-          localStorage.setItem('state', JSON.stringify(this.state))
-
-          this.textField.value = ''
-
-          this.removeUselessPlaceholderNodes()
-        }
-      });
-  }
-
-  renderLists() {
-    const stringState = localStorage.getItem('state')
-    this.state = JSON.parse(stringState) || []
-
-    this.state.forEach(({selected, title}) => {
-      const template: string =
-        `<mwc-check-list-item ${selected ? 'selected' : ''}>${title}</mwc-check-list-item>`
-
-      const list = selected ? this.selectedItemsList : this.defaultList
-      list.insertAdjacentHTML('beforeend', template)
-    })
-
-    this.populateEmptyLists()
-  }
-
-  populateEmptyLists() {
-    const createPlaceHolder = () => {
-      const placeholder = document.createElement('div')
-      placeholder.innerText = 'Список пуст'
-      placeholder.classList.add('placeholder-text-node')
-
-      return placeholder
-    }
-
-    if (this.selectedItemsList.children.length === 0) {
-      const emptyListTextNode = createPlaceHolder()
-      this.selectedItemsList.appendChild(emptyListTextNode)
-    }
-
-    if (this.defaultList.children.length === 0) {
-      const emptyListTextNode = createPlaceHolder()
-      this.defaultList.appendChild(emptyListTextNode)
-    }
-  }
-
-  removeUselessPlaceholderNodes() {
-    if (this.selectedItemsList.children.length === 2) {
-      const placeholderTextNode = this.selectedItemsList.querySelector('.placeholder-text-node')
-      this.selectedItemsList.removeChild(placeholderTextNode)
-    }
-
-    if (this.defaultList.children.length === 2) {
-      const placeholderTextNode = this.defaultList.querySelector('.placeholder-text-node')
-      this.defaultList.removeChild(placeholderTextNode)
-    }
-  }
-
-}
-
-const listOfItems = new ListOfItems()
-listOfItems.renderLists()
+    button.onclick = () => dialogRef.open = true
+  })
+})

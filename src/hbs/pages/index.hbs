@@ -6,18 +6,22 @@
       <mwc-icon-button id="info" icon="info" slot="actionItems"></mwc-icon-button>
     </mwc-top-app-bar>
 
-    <mwc-dialog id="dialog" heading="Что это?">
-      <div>
+    <mwc-dialog id="info-dialog" heading="Что это?">
+      <!--      <div>-->
+      <p>
         Это цифровой список покупок.
         Данные о покупках сохраняются в телефоне и никогда не отправляются в интернет.
         Приложение работает и в оффлайне.
-      </div>
+      </p>
+      <!--      </div>-->
       <mwc-button
           slot="primaryAction"
           dialogAction="accept">
         Ясно
       </mwc-button>
     </mwc-dialog>
+
+    <div class="js-dialog-container"></div>
 
     <main class="main">
       <div class="wrapper">
@@ -27,27 +31,23 @@
                        helperPersistent="true"></mwc-textfield>
 
         <div class="products-list">
-
-          <div class="default-list-wrapper">
-
-          <div class="list-header">
-            <h3 class="title">Что купить?</h3>
-            <mwc-button class="mwc-button" outlined label="Очистить список"></mwc-button>
-          </div>
-
-          <mwc-list multi id="default-list"></mwc-list>
-          </div>
-
-          <div class="selected-list-wrapper">
+          <div class="js-list-wrapper">
             <div class="list-header">
-              <h3 class="title">Куплено</h3>
-              <mwc-button class="mwc-button" outlined label="Очистить список"></mwc-button>
+              <h3 class="title">Что купить?</h3>
+              <mwc-button class="mwc-button js-clear-list-button" outlined label="Очистить список"></mwc-button>
             </div>
 
-          <mwc-list multi id="selected-items-list"></mwc-list>
-
+            <mwc-list class="js-mwc-list" multi id="js-default-list"></mwc-list>
           </div>
 
+          <div class="js-list-wrapper">
+            <div class="list-header">
+              <h3 class="title">Куплено</h3>
+              <mwc-button class="mwc-button js-clear-list-button" outlined label="Очистить список"></mwc-button>
+            </div>
+
+            <mwc-list class="js-mwc-list" multi id="js-selected-items-list"></mwc-list>
+          </div>
         </div>
       </div>
     </main>
