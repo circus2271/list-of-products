@@ -116,6 +116,10 @@ document.querySelectorAll('.js-clear-list-button').forEach((button: Button, i: n
       }
     })
 
-    button.onclick = () => dialogRef.open = true
+
+    // TODO: disable button if there is no listitems in a list
+    button.onclick = () => {
+      if (listEl.children.length > 0) dialogRef.open = true
+    }
   })
 })
