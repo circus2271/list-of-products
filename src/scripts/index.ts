@@ -16,13 +16,12 @@ import {
   handlePlaceholders,
   renderInitialState,
   state,
-  // showStateFactory,
   selectedItemsList,
   textField,
   removeAllSelectedItemsFromState,
   removeAllNotSelectedItemsFromState,
   handleButtonsDisabling,
-  IListItem, ListItem, showStateFactory,
+  ListItem
 } from "./includes/helpers";
 import { MDCDialogCloseEvent } from "@material/dialog/types";
 import { Button } from "@material/mwc-button/mwc-button";
@@ -31,11 +30,9 @@ const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-but
 const infoDialog: Dialog = document.querySelector('mwc-dialog#info-dialog')
 navbarInfoButton.onclick = () => infoDialog.show()
 
-// const showState = showStateFactory(true)
 
 renderInitialState()
 handleButtonsDisabling()
-// showState()
 
 textField.addEventListener('keyup', (event: KeyboardEvent) => {
   const enterPressed = event.key === 'Enter'
@@ -52,7 +49,7 @@ textField.addEventListener('keyup', (event: KeyboardEvent) => {
     checkListItem.innerText = newListItem.title
     checkListItem.id = newListItem.id
     defaultList.prepend(checkListItem)
-    // showState()
+
     handleButtonsDisabling()
     handlePlaceholders()
 
@@ -81,7 +78,7 @@ document.addEventListener('action', (event: SingleSelectedEvent) => {
     stateEl.selected = !stateEl.selected
     localStorage.setItem('state', JSON.stringify(state))
     newList.appendChild(selectedListItem)
-    // showState()
+
     handleButtonsDisabling()
     handlePlaceholders()
   }, 300)
@@ -99,7 +96,7 @@ document.querySelectorAll('.js-clear-list-button').forEach((button: Button, i: n
     console.warn('Очистить списки покупок временно не получится')
     return
   }
-
+ 
   const dialogId = `js-clear-list-dialog-${i + 1}`
   const primaryAction = 'confirm-deletion'
   const secondaryAction = 'cancel'
@@ -124,9 +121,9 @@ document.querySelectorAll('.js-clear-list-button').forEach((button: Button, i: n
         listEl.innerHTML = ''
         if (listEl === defaultList) removeAllNotSelectedItemsFromState()
         if (listEl === selectedItemsList) removeAllSelectedItemsFromState()
+     
         handleButtonsDisabling()
         handlePlaceholders()
-        // showState()
       }
     })
 

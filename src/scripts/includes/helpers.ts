@@ -20,7 +20,7 @@ export class ListItem implements IListItem {
 }
 
 export let state: IListItem[] = JSON.parse(localStorage.getItem('state')) || [];
-window['state'] = state
+// window['state'] = state
 export const renderInitialState = () => {
   state.forEach(product => {
     const listEl = product.selected ? selectedItemsList : defaultList
@@ -45,23 +45,6 @@ export const handlePlaceholders = () => {
 }
 
 
-// export const saveStateFromMarkupSource = () => {
-//   const listItems = document.querySelectorAll('mwc-check-list-item')
-//   // TODO: figure out why spread syntax throws an error here
-//   state = Array.from(listItems).map((item: CheckListItem) => {
-//     return {
-//       title: item.innerText,
-//       selected: item.selected
-//     }
-//   })
-//
-//   localStorage.setItem('state', JSON.stringify(state))
-// }
-
-// export const updateState = (newListItemValue: IListItem) => {
-//   state = [...state, newListItemValue]
-// }
-
 export const removeAllSelectedItemsFromState = () => {
   state = state.filter(stateItem => stateItem.selected === false)
   localStorage.setItem('state', JSON.stringify(state))
@@ -76,15 +59,3 @@ export const handleButtonsDisabling = () => {
   clearDefaultListButton.disabled = defaultList.children.length === 0
   clearSelectedListButton.disabled = selectedItemsList.children.length === 0
 }
-
-export const showStateFactory = (debug: boolean) => {
-  // const showState = showStateFactory()
-
-  if (debug) {
-    const stateContainer = document.createElement('div.state-container')
-    document.body.prepend(stateContainer)
-
-    return () => stateContainer.innerHTML = JSON.stringify(state)
-  }
-}
-
