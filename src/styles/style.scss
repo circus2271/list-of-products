@@ -5,6 +5,13 @@
 @import 'layout';
 @import 'pages/index';
 
-//body::-webkit-scrollbar {
-//  display: none;
-//}
+body {
+  opacity: 0;
+  //transition: .25s opacity ease-in;
+  //transition: .25s opacity ease-in;
+  //transition: .25s opacity;
+
+  &.ready {
+    opacity: 1;
+  }
+}

@@ -1,6 +1,6 @@
 import '../styles/style.scss'
 
-import '@material/mwc-top-app-bar'
+import '@material/mwc-top-app-bar-fixed'
 import '@material/mwc-icon-button'
 import '@material/mwc-dialog'
 import '@material/mwc-button'
@@ -25,10 +25,23 @@ import {
 } from "./includes/helpers";
 import { MDCDialogCloseEvent } from "@material/dialog/types";
 
+// wait until all custom elements are registered
+// then show page body
+const customElementsTagNames = ['mwc-top-app-bar-fixed', 'mwc-icon-button', 'mwc-dialog', 'mwc-button', 'mwc-textfield', 'mwc-list'];
+(async () => {
+  await Promise.allSettled(
+    customElementsTagNames.map(customElement => {
+      return customElements.whenDefined(customElement)
+    })
+  )
+
+  document.body.classList.add('ready');
+})()
+
+
 const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-button#info')
 const infoDialog: Dialog = document.querySelector('mwc-dialog#info-dialog')
 navbarInfoButton.onclick = () => infoDialog.show()
-
 
 renderInitialState()
 handleButtonsDisabling()
@@ -41,7 +54,7 @@ textField.addEventListener('keyup', (event: KeyboardEvent) => {
 
     if (value.trim() === '') return;
 
-    const newListItem = new ListItem(value, false, new Date().getTime().toString())
+    const newListItem = new ListItem(value.trim(), false, new Date().getTime().toString())
     state.push(newListItem)
     localStorage.setItem('state', JSON.stringify(state))
     const checkListItem = new CheckListItem()
@@ -65,7 +78,7 @@ document.addEventListener('action', (event: SingleSelectedEvent) => {
   const newListId = listElement.id === 'first' ? 'second' : 'first'
   const newList = document.getElementById(newListId)
 
-  // this peace of.. code is used to make sure that animation is ended
+  // this peace of.. code is used to make sure that checkbox animation is ended
   // TODO: change hardcoded value of setTimeout; replace it with real animation duration
   const attributeName = 'shouldBeMoved'
   if (selectedListItem.getAttribute(attributeName) === 'true') return
@@ -76,7 +89,13 @@ document.addEventListener('action', (event: SingleSelectedEvent) => {
     const stateEl = state.find(item => item.id === selectedListItem.id)
     stateEl.selected = !stateEl.selected
     localStorage.setItem('state', JSON.stringify(state))
-    newList.appendChild(selectedListItem)
+    const checkListItem = new CheckListItem()
+    checkListItem.innerText = selectedListItem.innerHTML
+    checkListItem.id = selectedListItem.id
+
+    listElement.removeChild(selectedListItem)
+    newList.appendChild(checkListItem)
+    // newList.prepend(checkListItem)
 
     handleButtonsDisabling()
     handlePlaceholders()
