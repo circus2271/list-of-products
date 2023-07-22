@@ -35,7 +35,10 @@ const customElementsTagNames = ['mwc-top-app-bar-fixed', 'mwc-icon-button', 'mwc
     })
   )
 
-  document.body.classList.add('ready');
+  // add additional time to render
+  setTimeout(() => {
+    document.body.classList.add('ready');
+  }, 300)
 })()
 
 
