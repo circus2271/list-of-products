@@ -24,7 +24,6 @@ import {
   ListItem
 } from "./includes/helpers";
 import { MDCDialogCloseEvent } from "@material/dialog/types";
-import { Button } from "@material/mwc-button/mwc-button";
 
 const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-button#info')
 const infoDialog: Dialog = document.querySelector('mwc-dialog#info-dialog')
@@ -38,7 +37,7 @@ textField.addEventListener('keyup', (event: KeyboardEvent) => {
   const enterPressed = event.key === 'Enter'
 
   if (enterPressed) {
-    const { value } = textField;
+    const {value} = textField;
 
     if (value.trim() === '') return;
 
@@ -63,10 +62,10 @@ document.addEventListener('action', (event: SingleSelectedEvent) => {
   const selectedListItem = listElement.children.item(selectedListItemIndex) as CheckListItem
 
   // TODO: rewrite this
-  const newListId = listElement.id === 'js-default-list' ? 'js-selected-items-list' : 'js-default-list'
-  const newList = document.querySelector(`#${newListId}`)
+  const newListId = listElement.id === 'first' ? 'second' : 'first'
+  const newList = document.getElementById(newListId)
 
-  // this peace of code is used to make sure that animation is ended
+  // this peace of.. code is used to make sure that animation is ended
   // TODO: change hardcoded value of setTimeout; replace it with real animation duration
   const attributeName = 'shouldBeMoved'
   if (selectedListItem.getAttribute(attributeName) === 'true') return
@@ -85,50 +84,24 @@ document.addEventListener('action', (event: SingleSelectedEvent) => {
 })
 
 
-document.querySelectorAll('.js-clear-list-button').forEach((button: Button, i: number) => {
+document.querySelectorAll('.js-clear-list-button').forEach((button: HTMLHtmlElement) => {
   const listEl = button.closest('.js-list-wrapper').querySelector('.js-mwc-list')
+  const listId = listEl.id
+  const dialogId = listId === 'first' ? 'first-dialog' : 'second-dialog'
+  const dialog = document.getElementById(dialogId) as Dialog
 
-  let heading;
-  if (listEl === defaultList) heading = 'Удалить список еще не купленных товаров?'
-  if (listEl === selectedItemsList) heading = 'Удалить список уже приобретённых товаров?'
-  if (heading === undefined) {
-    console.warn('Что-то не так со списками покупок.. Вероятно, неправильно расставлены их id в разметке')
-    console.warn('Очистить списки покупок временно не получится')
-    return
-  }
- 
-  const dialogId = `js-clear-list-dialog-${i + 1}`
-  const primaryAction = 'confirm-deletion'
-  const secondaryAction = 'cancel'
-  const dialog = `
-    <mwc-dialog heading="${heading}" id="${dialogId}">
-      <mwc-button slot="primaryAction" dialogAction="${primaryAction}">Удалить</mwc-button>
-      <mwc-button slot="secondaryAction" dialogAction="${secondaryAction}">Не удалять</mwc-button>
-    </mwc-dialog>
-  `
+  dialog.addEventListener('closed', (e: MDCDialogCloseEvent) => {
+    const {action} = e.detail;
 
-  const dialogContainer = document.querySelector('.js-dialog-container')
-  dialogContainer.innerHTML += dialog
+    if (action === 'delete') {
+      listEl.innerHTML = ''
+      if (listEl === defaultList) removeAllNotSelectedItemsFromState()
+      if (listEl === selectedItemsList) removeAllSelectedItemsFromState()
 
-  setTimeout(() => {
-    // wait until dialog is placed into dialogContainer
-    // use event loop to delay this code execution
-    const dialogRef: Dialog = dialogContainer.querySelector(`#${dialogId}`)
-    dialogRef.addEventListener('closed', (e: MDCDialogCloseEvent) => {
-      const { action } = e.detail;
-
-      if (action === primaryAction) {
-        listEl.innerHTML = ''
-        if (listEl === defaultList) removeAllNotSelectedItemsFromState()
-        if (listEl === selectedItemsList) removeAllSelectedItemsFromState()
-     
-        handleButtonsDisabling()
-        handlePlaceholders()
-      }
-    })
-
-    button.onclick = () => {
-      if (listEl.children.length > 0) dialogRef.open = true
+      handleButtonsDisabling()
+      handlePlaceholders()
     }
   })
+
+  button.onclick = () => dialog.open = true;
 })

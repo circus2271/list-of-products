@@ -4,3 +4,7 @@
 @import 'helpers/material-overrides';
 @import 'layout';
 @import 'pages/index';
+
+//body::-webkit-scrollbar {
+//  display: none;
+//}

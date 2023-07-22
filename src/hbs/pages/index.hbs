@@ -7,13 +7,11 @@
     </mwc-top-app-bar>
 
     <mwc-dialog id="info-dialog" heading="Что это?">
-      <!--      <div>-->
       <p>
         Это цифровой список покупок.
         Данные о покупках сохраняются в телефоне и никогда не отправляются в интернет.
         Приложение работает и в оффлайне.
       </p>
-      <!--      </div>-->
       <mwc-button
           slot="primaryAction"
           dialogAction="accept">
@@ -21,7 +19,16 @@
       </mwc-button>
     </mwc-dialog>
 
-    <div class="js-dialog-container"></div>
+
+    <mwc-dialog heading="Удалить список еще не купленных товаров?" id="first-dialog">
+      <mwc-button slot="primaryAction" dialogAction="delete">Удалить</mwc-button>
+      <mwc-button slot="secondaryAction" dialogAction="cancel">Не удалять</mwc-button>
+    </mwc-dialog>
+
+    <mwc-dialog heading="Удалить список уже приобретённых товаров?" id="second-dialog">
+      <mwc-button slot="primaryAction" dialogAction="delete">Удалить</mwc-button>
+      <mwc-button slot="secondaryAction" dialogAction="cancel">Не удалять</mwc-button>
+    </mwc-dialog>
 
     <main class="main">
       <div class="wrapper">
@@ -37,7 +44,7 @@
               <mwc-button class="mwc-button js-clear-list-button" id="js-clear-default-list-button" outlined label="Очистить список"></mwc-button>
             </div>
 
-            <mwc-list class="js-mwc-list" multi id="js-default-list"></mwc-list>
+            <mwc-list class="js-mwc-list" multi id="first"></mwc-list>
           </div>
 
           <div class="js-list-wrapper">
@@ -46,7 +53,7 @@
               <mwc-button class="mwc-button js-clear-list-button" id="js-clear-selected-list-button" outlined label="Очистить список"></mwc-button>
             </div>
 
-            <mwc-list class="js-mwc-list" multi id="js-selected-items-list"></mwc-list>
+            <mwc-list class="js-mwc-list" multi id="second"></mwc-list>
           </div>
         </div>
       </div>

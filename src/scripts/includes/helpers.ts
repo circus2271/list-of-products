@@ -3,8 +3,8 @@ import { TextField } from "@material/mwc-textfield";
 import { Button } from "@material/mwc-button/mwc-button";
 
 export const textField: TextField = document.querySelector('mwc-textfield#product-name')
-export const defaultList = document.querySelector('#js-default-list')
-export const selectedItemsList = document.querySelector('#js-selected-items-list')
+export const defaultList = document.getElementById('first')
+export const selectedItemsList = document.getElementById('second')
 export const clearDefaultListButton: Button = document.querySelector('#js-clear-default-list-button')
 export const clearSelectedListButton: Button = document.querySelector('#js-clear-selected-list-button')
 
@@ -28,7 +28,7 @@ export const renderInitialState = () => {
     listItem.innerText = product.title
     listItem.selected = product.selected
     listItem.id = product.id
-    listEl.appendChild(listItem)
+    listEl.prepend(listItem)
   })
 
   handlePlaceholders()
