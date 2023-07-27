@@ -8,6 +8,7 @@ module.exports = merge(common, {
   devServer: {
     static: path.join(__dirname, '../dist'),
     host: '0.0.0.0',
+    watchFiles: path.join(__dirname, '../src/**/*')
   },
   module: {
     rules: [

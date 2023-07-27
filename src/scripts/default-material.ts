@@ -95,7 +95,6 @@ document.addEventListener('action', (event: SingleSelectedEvent) => {
     const checkListItem = new CheckListItem()
     checkListItem.innerText = selectedListItem.innerHTML
     checkListItem.id = selectedListItem.id
-    checkListItem.selected = stateEl.selected
 
     listElement.removeChild(selectedListItem)
     newList.appendChild(checkListItem)

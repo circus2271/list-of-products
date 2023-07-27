@@ -56,6 +56,7 @@
     "@material/mwc-textfield": "^0.20.0",
     "@material/mwc-top-app-bar": "^0.20.0",
     "@material/mwc-top-app-bar-fixed": "^0.20.0",
+    "@shoelace-style/shoelace": "^2.5.2",
     "@webcomponents/webcomponentsjs": "^2.5.0",
     "workbox-cacheable-response": "^6.0.2",
     "workbox-expiration": "^6.0.2",
