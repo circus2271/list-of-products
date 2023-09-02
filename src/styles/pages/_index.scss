@@ -1,50 +1,50 @@
-.products-list {
-  max-width: 800px;
-}
-
-.products-list h3.title {
-  margin-bottom: 0;
-}
-
-.placeholder-text-node {
-  height: 56px;
-  padding: 0 16px;
-  line-height: 1.15;
-  display: flex;
-  align-items: center;
-}
-
-.list-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 16px;
-
-  .title {
-    margin-top: 0;
-  }
-}
-
-mwc-list {
-  position: relative;
-
-  &::after {
-    content: unset;
-    height: 56px;
-    padding: 8px 16px;
-    line-height: 1.15;
-    //font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-  }
-
-  &.placeholder-visible {
-    //override default .mdc-list padding
-    --mdc-list-vertical-padding: 0;
-
-    &::after {
-      content: 'Список пуст'
-    }
-  }
-}
-
+//.products-list {
+//  max-width: 800px;
+//}
+//
+//.products-list h3.title {
+//  margin-bottom: 0;
+//}
+//
+//.placeholder-text-node {
+//  height: 56px;
+//  padding: 0 16px;
+//  line-height: 1.15;
+//  display: flex;
+//  align-items: center;
+//}
+//
+//.list-header {
+//  display: flex;
+//  justify-content: space-between;
+//  align-items: center;
+//  padding-top: 16px;
+//
+//  .title {
+//    margin-top: 0;
+//  }
+//}
+//
+//mwc-list {
+//  position: relative;
+//
+//  &::after {
+//    content: unset;
+//    height: 56px;
+//    padding: 8px 16px;
+//    line-height: 1.15;
+//    //font-size: 1.1rem;
+//    display: flex;
+//    align-items: center;
+//  }
+//
+//  &.placeholder-visible {
+//    //override default .mdc-list padding
+//    --mdc-list-vertical-padding: 0;
+//
+//    &::after {
+//      content: 'Список пуст'
+//    }
+//  }
+//}
+//

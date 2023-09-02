@@ -1,62 +1,222 @@
 {{#> layouts/base }}
   {{#*inline "content"}}
 
-    <mwc-top-app-bar-fixed>
-      <div slot="title">Список покупок</div>
-      <mwc-icon-button id="info" icon="info" slot="actionItems"></mwc-icon-button>
-    </mwc-top-app-bar-fixed>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/light.css" />
 
-    <mwc-dialog id="info-dialog" heading="Что это?">
-      <p>
-        Это цифровой список покупок.
-        Данные о покупках сохраняются в телефоне и никогда не отправляются в интернет.
-        Приложение работает и в оффлайне.
-      </p>
-      <mwc-button
-          slot="primaryAction"
-          dialogAction="accept">
-        Ясно
-      </mwc-button>
-    </mwc-dialog>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/themes/dark.css"
+    />
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.5.2/cdn/shoelace-autoloader.js"></script>
 
+    <div class="shoelace-wrapper">
+      <div class="top-app-bar">
+        Список покупок
 
-    <mwc-dialog heading="Удалить список еще не купленных товаров?" id="first-dialog">
-      <mwc-button slot="primaryAction" dialogAction="delete">Удалить</mwc-button>
-      <mwc-button slot="secondaryAction" dialogAction="cancel">Не удалять</mwc-button>
-    </mwc-dialog>
+        <div class="icons">
 
-    <mwc-dialog heading="Удалить список уже приобретённых товаров?" id="second-dialog">
-      <mwc-button slot="primaryAction" dialogAction="delete">Удалить</mwc-button>
-      <mwc-button slot="secondaryAction" dialogAction="cancel">Не удалять</mwc-button>
-    </mwc-dialog>
+        <sl-button variant="default" size="small" circle>
+<!--        <sl-button variant="primary" size="small" circle>-->
+          <sl-icon name="gear" label="Settings"></sl-icon>
+        </sl-button>
+          <sl-button id="sl-info" variant="default" size="small" circle>
+<!--          <sl-button variant="primary" size="small" circle>-->
+<!--            <sl-icon name="info-circle" label="Info"></sl-icon>-->
+            <sl-icon name="info" label="Info"></sl-icon>
+          </sl-button>
 
-    <main class="main">
-      <div class="wrapper">
-
-        <h3 class="title">Добавить новый товар в список</h3>
-        <mwc-textfield id="product-name" label="Название товара" icon="add" helper="Добавить новый товар в список"
-                       helperPersistent="true"></mwc-textfield>
-
-        <div class="products-list">
-          <div class="js-list-wrapper">
-            <div class="list-header">
-              <h3 class="title">Что купить?</h3>
-              <mwc-button class="mwc-button js-clear-list-button" id="js-clear-default-list-button" outlined label="Очистить список"></mwc-button>
-            </div>
-
-            <mwc-list class="js-mwc-list" multi id="first"></mwc-list>
-          </div>
-
-          <div class="js-list-wrapper">
-            <div class="list-header">
-              <h3 class="title">Куплено</h3>
-              <mwc-button class="mwc-button js-clear-list-button" id="js-clear-selected-list-button" outlined label="Очистить список"></mwc-button>
-            </div>
-
-            <mwc-list class="js-mwc-list" multi id="second"></mwc-list>
-          </div>
         </div>
       </div>
-    </main>
+
+      <main class="main">
+        <div class="wrapper">
+
+
+          <h3 class="title">Добавить новый товар в список</h3>
+
+          <sl-dialog label="Dialog">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+<!--            <div slot="header-actions">fd</div>-->
+            <div slot="footer">
+
+<!--              <sl-button  variant="primary">Close</sl-button>-->
+              <sl-button  variant="primary">Close</sl-button>
+            </div>
+          </sl-dialog>
+
+
+          <sl-dialog label="Dialog">
+            Удалить список еще не купленных товаров?
+            <!--            <div slot="header-actions">fd</div>-->
+            <div slot="footer">
+
+              <!--              <sl-button  variant="primary">Close</sl-button>-->
+              <sl-button  variant="primary">Удалить</sl-button>
+            </div>
+          </sl-dialog>
+
+
+          <sl-dialog label="Dialog">
+            Удалить список уже приобретённых товаров?
+            <!--            <div slot="header-actions">fd</div>-->
+            <div slot="footer">
+
+              <!--              <sl-button  variant="primary">Close</sl-button>-->
+              <sl-button  variant="primary">Удалить</sl-button>
+            </div>
+          </sl-dialog>
+<!--          <sl-button>Open Dialog</sl-button>-->
+
+          <mwc-dialog heading="Удалить список еще не купленных товаров?" id="first-dialog">
+            <mwc-button slot="primaryAction" dialogAction="delete">Удалить</mwc-button>
+            <mwc-button slot="secondaryAction" dialogAction="cancel">Не удалять</mwc-button>
+          </mwc-dialog>
+          <mwc-dialog heading="Удалить список уже приобретённых товаров?" id="second-dialog">
+            <mwc-button slot="primaryAction" dialogAction="delete">Удалить</mwc-button>
+            <mwc-button slot="secondaryAction" dialogAction="cancel">Не удалять</mwc-button>
+          </mwc-dialog>
+
+          <script>
+            const dialog = document.querySelector('sl-dialog');
+            // const openButton = dialog.nextElementSibling;
+            const openButton = document.getElementById('sl-info');
+            const closeButton = dialog.querySelector('[slot="footer"] sl-button');
+
+            openButton.addEventListener('click', () => dialog.show());
+            closeButton.addEventListener('click', () => dialog.hide());
+          </script>
+
+
+<!--          <sl-input label="Название товара" help-text="Добавить новый товар в список"></sl-input>-->
+          <sl-input label="Название товара"></sl-input>
+
+<!--          <mwc-textfield id="product-name" label="Название товара" icon="add" helper="Добавить новый товар в список"-->
+<!--                         helperPersistent="true"></mwc-textfield>-->
+          <div class="products-list">
+            <div class="js-list-wrapper">
+              <div class="list-header">
+                <h3 class="title">Что купить?</h3>
+<!--                <sl-button class="mwc-button js-clear-list-button">Очистить список</sl-button>-->
+<!--                <sl-button class="mwc-button js-clear-list-button" variant="danger" outline>Очистить список</sl-button>-->
+<!--                <sl-button class="mwc-button js-clear-list-button" variant="primary" outline>Очистить список</sl-button>-->
+                <sl-button class="js-clear-list-button" variant="default">Очистить список</sl-button>
+
+<!--                <mwc-button class="mwc-button js-clear-list-button"-->
+<!--                            id="js-clear-default-list-button"-->
+<!--                            outlined-->
+<!--                            label="Очистить список"></mwc-button>-->
+              </div>
+              <ul>
+                <li>
+                  <sl-checkbox>part label</sl-checkbox>
+                </li>
+                <li>
+                  <sl-checkbox>Checkbox</sl-checkbox>
+                </li>
+                <li>
+                  <sl-checkbox>Кофе</sl-checkbox>
+                </li>
+                <li>
+                  <sl-checkbox>Мофе</sl-checkbox>
+                </li>
+                <li>
+                  <sl-checkbox>Гофе</sl-checkbox>
+                </li>
+              </ul>
+<!--              <mwc-list class="js-mwc-list" multi id="first"></mwc-list>-->
+            </div>
+            <div class="js-list-wrapper">
+              <div class="list-header">
+                <h3 class="title">Куплено</h3>
+                <sl-button class="js-clear-list-button" variant="default">Очистить список</sl-button>
+
+<!--                <mwc-button class="mwc-button js-clear-list-button"-->
+<!--                            id="js-clear-selected-list-button"-->
+<!--                            outlined-->
+<!--                            label="Очистить список"></mwc-button>-->
+              </div>
+              <ul>
+                <li>
+                  <sl-checkbox>1</sl-checkbox>
+                </li>
+                <li>
+                  <sl-checkbox>2</sl-checkbox>
+                </li>
+                <li>
+                  <sl-checkbox>30</sl-checkbox>
+                </li>
+              </ul>
+<!--              <mwc-list class="js-mwc-list" multi id="second"></mwc-list>-->
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+
+
+
+
+
+
+
+
+
+<!--    <div class="material-v2" style="display: none">-->
+    <div class="material-v2">
+      <mwc-top-app-bar-fixed>
+        <div slot="title">Список покупок</div>
+        <mwc-icon-button id="info" icon="info" slot="actionItems"></mwc-icon-button>
+      </mwc-top-app-bar-fixed>
+      <mwc-dialog id="info-dialog" heading="Что это?">
+        <p>
+          Это цифровой список покупок.
+          Данные о покупках сохраняются в телефоне и никогда не отправляются в интернет.
+          Приложение работает и в оффлайне.
+        </p>
+        <mwc-button
+            slot="primaryAction"
+            dialogAction="accept">
+          Ясно
+        </mwc-button>
+      </mwc-dialog>
+      <mwc-dialog heading="Удалить список еще не купленных товаров?" id="first-dialog">
+        <mwc-button slot="primaryAction" dialogAction="delete">Удалить</mwc-button>
+        <mwc-button slot="secondaryAction" dialogAction="cancel">Не удалять</mwc-button>
+      </mwc-dialog>
+      <mwc-dialog heading="Удалить список уже приобретённых товаров?" id="second-dialog">
+        <mwc-button slot="primaryAction" dialogAction="delete">Удалить</mwc-button>
+        <mwc-button slot="secondaryAction" dialogAction="cancel">Не удалять</mwc-button>
+      </mwc-dialog>
+      <main class="main">
+        <div class="wrapper">
+          <h3 class="title">Добавить новый товар в список</h3>
+          <mwc-textfield id="product-name" label="Название товара" icon="add" helper="Добавить новый товар в список"
+                         helperPersistent="true"></mwc-textfield>
+          <div class="products-list">
+            <div class="js-list-wrapper">
+              <div class="list-header">
+                <h3 class="title">Что купить?</h3>
+                <mwc-button class="mwc-button js-clear-list-button"
+                            id="js-clear-default-list-button"
+                            outlined
+                            label="Очистить список"></mwc-button>
+              </div>
+              <mwc-list class="js-mwc-list" multi id="first"></mwc-list>
+            </div>
+            <div class="js-list-wrapper">
+              <div class="list-header">
+                <h3 class="title">Куплено</h3>
+                <mwc-button class="mwc-button js-clear-list-button"
+                            id="js-clear-selected-list-button"
+                            outlined
+                            label="Очистить список"></mwc-button>
+              </div>
+              <mwc-list class="js-mwc-list" multi id="second"></mwc-list>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   {{/inline}}
 {{/ layouts/base }}

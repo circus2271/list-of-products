@@ -27,3 +27,142 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+
+.products-list {
+  max-width: 800px;
+}
+
+.products-list h3.title {
+  margin-bottom: 0;
+}
+
+.placeholder-text-node {
+  height: 56px;
+  padding: 0 16px;
+  line-height: 1.15;
+  display: flex;
+  align-items: center;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+
+  .title {
+    margin-top: 0;
+  }
+}
+
+//.mdc-top-app-bar {
+//  position: static
+//}
+
+mwc-list {
+  position: relative;
+
+  &::after {
+    content: unset;
+    height: 56px;
+    padding: 8px 16px;
+    line-height: 1.15;
+    //font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  &.placeholder-visible {
+    //override default .mdc-list padding
+    --mdc-list-vertical-padding: 0;
+
+    &::after {
+      content: 'Список пуст'
+    }
+  }
+}
+
+.shoelace-wrapper {
+  //font-family: var(--sl-input-font-family);
+  font-family: var(--sl-font-sans);
+
+  color: var(--sl-color-neutral-700);
+
+
+  .top-app-bar {
+    //font-family: var(--sl-font-serif);
+
+    padding: 16px 16px 16px 32px;
+    //padding: 16px 16px 16px 24px;
+    background: lightblue;
+    //font-size: 1.2rem;
+    font-size: var(--sl-font-size-large);
+    font-weight: 500;
+
+    //background-color: var(--sl-color-neutral-800);
+    //background-color: var(--sl-color-neutral-50);
+    //background-color: var(--sl-color-success-700);
+    //background-color: var(--sl-color-success-600);
+    background-color: var(--sl-color-neutral-200);
+    //color: var(--sl-color-neutral-900);
+    //background-color: #e11d48; // tailwind rose 600
+
+    // shoelace light rose
+    background-color: var(--sl-color-rose-600); // tailwind rose 600
+    color: var(--sl-color-neutral-50);
+    border-bottom: 1px solid var(--sl-panel-border-color);
+    //font-size: var(----sl-font-size-large);
+    //letter-spacing: var(--sl-letter-spacing-loose)
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    //.icons {
+    //  margin-left: auto;
+    //}
+  }
+
+  sl-button[circle]::part(base) {
+    background-color: var(--sl-color-neutral-50);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      //padding: 16px 12px;
+      font-size: 1rem;
+      line-height: 1.5;
+      cursor: pointer;
+      //transition: .3s background-color;
+
+      &:hover {
+        //background: #eee;
+        background: #f1f3f4; // developers.chrome.com hover color
+        //background: #efefef;
+      }
+
+      //&:active {
+      //  background-color: var(--sl-color-success-200);
+      //}
+    }
+
+
+    sl-checkbox {
+      display: block;
+      width: 100%;
+    }
+
+    sl-checkbox::part(base) {
+      flex-direction: row-reverse;
+      width: 100%;
+      padding: 16px 12px;
+    }
+
+    sl-checkbox::part(label) {
+      margin-right: auto;
+    }
+  }
+}
+
