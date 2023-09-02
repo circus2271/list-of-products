@@ -12,6 +12,15 @@ body {
   justify-content: flex-start;
   padding-bottom: 2.5rem;
   box-sizing: border-box;
+
+
+  //--color: #444;
+  //--color: #333;
+  --color: #222;
+  color: var(--color);
+  --mdc-dialog-heading-ink-color: var(--color);
+  --mdc-theme-text-primary-on-background: var(--color);
+  --mdc-text-field-ink-color: var(--color);
 }
 
 .wrapper {
