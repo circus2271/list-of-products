@@ -28,17 +28,18 @@ import { MDCDialogCloseEvent } from "@material/dialog/types";
 // wait until all custom elements are registered
 // then show page body
 const customElementsTagNames = ['mwc-top-app-bar-fixed', 'mwc-icon-button', 'mwc-dialog', 'mwc-button', 'mwc-textfield', 'mwc-list'];
-(async () => {
-  await Promise.allSettled(
+(() => {
+  Promise.allSettled(
     customElementsTagNames.map(customElement => {
       return customElements.whenDefined(customElement)
     })
-  )
-
-  // add additional time to render
-  setTimeout(() => {
-    document.body.classList.add('ready');
-  }, 300)
+  ).then(() => {
+    setTimeout(() => {
+      document.body.classList.add('ready');
+    // }, 250)
+    }, 300)
+    // }, 0)
+  })
 })()
 
 
