@@ -81,6 +81,7 @@ module.exports = {
       {
         test: /\.woff2$/i,
         use: 'url-loader',
+        // use: 'file-loader',
       },
       {
         test: /\.ts$/,
