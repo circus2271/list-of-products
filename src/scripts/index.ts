@@ -13,17 +13,13 @@ import { SingleSelectedEvent } from "@material/mwc-list/mwc-list-foundation";
 import { CheckListItem } from "@material/mwc-list/mwc-check-list-item";
 import {
   defaultList,
-  handlePlaceholders,
-  renderInitialState,
-  state,
   selectedItemsList,
   textField,
-  removeAllSelectedItemsFromState,
-  removeAllNotSelectedItemsFromState,
-  handleButtonsDisabling,
-  ListItem
+  ListItem,
 } from "./includes/helpers";
 import { MDCDialogCloseEvent } from "@material/dialog/types";
+import State from "./includes/state";
+import Renderer from "./includes/renderer";
 
 // wait until all custom elements are registered
 // then show page body
@@ -34,11 +30,7 @@ const customElementsTagNames = ['mwc-top-app-bar-fixed', 'mwc-icon-button', 'mwc
       return customElements.whenDefined(customElement)
     })
   ).then(() => {
-    setTimeout(() => {
-      document.body.classList.add('ready');
-    // }, 250)
-    }, 300)
-    // }, 0)
+    document.body.classList.add('ready');
   })
 })()
 
@@ -47,8 +39,9 @@ const navbarInfoButton: HTMLButtonElement = document.querySelector('mwc-icon-but
 const infoDialog: Dialog = document.querySelector('mwc-dialog#info-dialog')
 navbarInfoButton.onclick = () => infoDialog.show()
 
-renderInitialState()
-handleButtonsDisabling()
+Renderer.renderInitialState()
+Renderer.handlePlaceholders()
+Renderer.handleButtonsDisabling()
 
 textField.addEventListener('keyup', (event: KeyboardEvent) => {
   const enterPressed = event.key === 'Enter'
@@ -58,16 +51,15 @@ textField.addEventListener('keyup', (event: KeyboardEvent) => {
 
     if (value.trim() === '') return;
 
-    const newListItem = new ListItem(value.trim(), false, new Date().getTime().toString())
-    state.push(newListItem)
-    localStorage.setItem('state', JSON.stringify(state))
+    const newListItem = new ListItem({title: value.trim()})
+    State.addItem({listItem: newListItem})
     const checkListItem = new CheckListItem()
     checkListItem.innerText = newListItem.title
     checkListItem.id = newListItem.id
     defaultList.prepend(checkListItem)
 
-    handleButtonsDisabling()
-    handlePlaceholders()
+    Renderer.handleButtonsDisabling()
+    Renderer.handlePlaceholders()
 
     textField.value = ''
   }
@@ -90,20 +82,21 @@ document.addEventListener('action', (event: SingleSelectedEvent) => {
   setTimeout(() => {
     selectedListItem.setAttribute(attributeName, 'false');
 
-    const stateEl = state.find(item => item.id === selectedListItem.id)
-    stateEl.selected = !stateEl.selected
-    localStorage.setItem('state', JSON.stringify(state))
+    const el = State.getItem(selectedListItem.id)
+    el.selected = !el.selected
+    State.removeItem(el.id)
+    const newListItem = new ListItem({title: el.title, selected: el.selected})
+    State.addItem({listItem: newListItem, position: 'start'})
     const checkListItem = new CheckListItem()
-    checkListItem.innerText = selectedListItem.innerHTML
-    checkListItem.id = selectedListItem.id
-    checkListItem.selected = stateEl.selected
+    checkListItem.innerText = newListItem.title
+    checkListItem.id = newListItem.id
+    checkListItem.selected = newListItem.selected
 
     listElement.removeChild(selectedListItem)
     newList.appendChild(checkListItem)
-    // newList.prepend(checkListItem)
 
-    handleButtonsDisabling()
-    handlePlaceholders()
+    Renderer.handleButtonsDisabling()
+    Renderer.handlePlaceholders()
   }, 300)
 })
 
@@ -119,11 +112,11 @@ document.querySelectorAll('.js-clear-list-button').forEach((button: HTMLHtmlElem
 
     if (action === 'delete') {
       listEl.innerHTML = ''
-      if (listEl === defaultList) removeAllNotSelectedItemsFromState()
-      if (listEl === selectedItemsList) removeAllSelectedItemsFromState()
+      if (listEl === defaultList) State.removeAllNotSelectedItemsFromState()
+      if (listEl === selectedItemsList) State.removeAllSelectedItemsFromState()
 
-      handleButtonsDisabling()
-      handlePlaceholders()
+      Renderer.handleButtonsDisabling()
+      Renderer.handlePlaceholders()
     }
   })
 
